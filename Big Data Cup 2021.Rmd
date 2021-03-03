@@ -1,5 +1,5 @@
 ---
-title: "Goal Scoring and Play Making Skill in NWHL"
+title: A Framework for Assessing Goal Scoring and Play Making Skill in the NWHL
 author: |
   | Dani Treisman
   | danitreisman@gmail.com
