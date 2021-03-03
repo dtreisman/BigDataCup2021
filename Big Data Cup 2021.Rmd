@@ -3,7 +3,6 @@ title: A Framework for Assessing Goal Scoring and Play Making Skill in the NWHL
 author: |
   | Dani Treisman
   | danitreisman@gmail.com
-date: "March 5, 2021"
 output:
   pdf_document: default
   html_document:
@@ -122,4 +121,4 @@ The code is available on GitHub: <https://github.com/dtreisman/BigDataCup2021>\
 [Github](https://dtreisman.github.io/Portfolio)\
 [LinkedIn](https://www.linkedin.com/in/dani-treisman/)
 
-![Players that have passed to or received passes from Autumn MacDougall with their shooting and passing effects](am_teammates.png){width="199"}
+![Players that have passed to or received passes from Autumn MacDougall with their shooting and passing effects](am_teammates.png){width="186"}
