@@ -20,7 +20,7 @@ library(raster)
 library(magick)
 library(gt)
 
-# 2 NHL Rink Functions ------------------------------------------------------
+# 2 NHL Rink Functions (not used in this paper) ------------------------------------------------------
 
 
 create_circle = function(center = c(0, 0), npoints = 500, diameter = 1, start = 0, end = 2, color = '#c8012e', fill = NA){
