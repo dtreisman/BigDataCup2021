@@ -11,7 +11,7 @@
 
 # 2. Data
 
-     The data used for this analysis is from the [Stathletes Big Data Bowl 2021](https://www.stathletes.com/big-data-cup/ "Stathletes Big Data Bowl 2021"), hockey analytics competition. The data includes detail on events such as passes, shots, penalties, as well as X and Y coordinates for each event, player info, time stamps, and more. The details of the feature engineering and data preparation for each aspect of this analysis will be explained in their respective sections.
+     The data used for this analysis is from the [Stathletes Big Data Cup 2021](https://www.stathletes.com/big-data-cup/ "Stathletes Big Data Bowl 2021"), hockey analytics competition. The data includes detail on events such as passes, shots, penalties, as well as X and Y coordinates for each event, player info, time stamps, and more. The details of the feature engineering and data preparation for each aspect of this analysis will be explained in their respective sections.
 
 # 3. xG Model
 
