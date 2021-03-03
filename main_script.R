@@ -22,6 +22,9 @@ library(gt)
 
 # 2 NHL Rink Functions (not used in this paper) ------------------------------------------------------
 
+# code source
+# https://github.com/rossdrucker/Playing-Surface
+
 
 create_circle = function(center = c(0, 0), npoints = 500, diameter = 1, start = 0, end = 2, color = '#c8012e', fill = NA){
   pts = seq(start * pi, end * pi, length.out = npoints)
