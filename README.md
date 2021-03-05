@@ -19,7 +19,7 @@ The data used for this analysis is from the [Stathletes Big Data Cup 2021](https
 
 For the *xG* model, I selected all events that were either a shot or a goal. The variables are any events or situational factors prior to or at the time of the shot that could affect the probability of scoring a goal. I extracted the following features:
 
--   `Period`: values of 1, 2, 3 (4 for overtime) for current Period in the game.
+-   `Period`: Values of 1, 2, 3 (4 for overtime) for current Period in the game.
 -   `Seconds Remaining in Period`
 -   `X.Coordinate`, `x_prev`, `x_prev2`: X coordinate (ice length) for shot (current, previous, and 2 events prior)
 -   `Y.Coordinate`, `y_prev`, `y_prev2`: Y coordinate (ice width) for shot (current, previous, and 2 events prior)
@@ -27,9 +27,9 @@ For the *xG* model, I selected all events that were either a shot or a goal. The
 -   `side`, `side_prev`, `side_prev2`: Home or Away (current, previous, and 2 events prior)
 -   `skater_adv`: Total skater advantage for shooting team
 -   `differential`: Score differential for shooting team
--   `shot_angle`: angle of shot from center of goal
--   `shot_dist`: euclidean distance to center of goal
--   `shots_period_cumsum`: cumulative sum of shots for the shooting team in the current period\
+-   `shot_angle`: Angle of shot from center of goal
+-   `shot_dist`: Euclidean distance to center of goal
+-   `shots_period_cumsum`: Cumulative sum of shots for the shooting team in the current period\
 
 I used a Random Forest model to predict the probability of a goal occurring on each shot using a 70/30 train-test split. Building an *xG* model is difficult in general due to the rarity of goals. The data for this analysis was particularly challenging to work with since there were only 76 goals out of 1985 recorded shots. The challenge with highly imbalanced data is that the model will default to picking the majority class since it will be, in this case, 96% accurate. In order to account for this, I used down-sampling within the `randomForest()` function in R using the `sampsize` argument. I also changed the cutoff to 65/35 instead of the default 50/50 which helped with test accuracy and log-loss. The baseline log-loss which I have defined as the log-loss if we used the mean number of goals as our prediction, was 1.63. The random forest log-loss was .845. The model correctly predicted 43 out of 54 goals in the training split and 19 out of the 22 goals in the test split. The most important features were the shot distance from the goal and the location of the shot. 
      
@@ -79,18 +79,18 @@ As a side note, there have been many attempts at evaluating future *xG* or futur
 
 The features for this model are:
 
--   `Period`: values of 1, 2, 3 (4 for overtime) for current Period in the game.
+-   `Period`: Values of 1, 2, 3 (4 for overtime) for current Period in the game.
 -   `Seconds Remaining in Period`
 -   `X.Coordinate`, `x_prev`, `x_prev2`: X coordinate (ice length) for pass (current, previous, and 2 events prior)
 -   `Y.Coordinate`, `y_prev`, `y_prev2`: Y coordinate (ice width) for pass (current, previous, and 2 events prior)
--   `X.Coordinate.2`, `Y.Coordinate.2` - X and Y coordinate of pass target location
+-   `X.Coordinate.2`, `Y.Coordinate.2`: X and Y coordinate of pass target location
 -   `Detail.1`: Pass detail (Direct or Indirect)
 -   `side`, `side_prev`, `side_prev2`: Home or Away (current, previous, and 2 events prior)
 -   `skater_adv`: Total skater advantage for event team
 -   `differential`: Score differential for event team
 -   `time_since_last_shot:` Seconds since last shot for passing team
--   `shots_period_cumsum`: cumulative sum of shots for the shooting team in the current period
--   `xG_prev_10s`: total team xG in previous 10 seconds, adjusted for teammate shooting skill
+-   `shots_period_cumsum`: Cumulative sum of shots for the shooting team in the current period
+-   `xG_prev_10s`: Total team xG in previous 10 seconds, adjusted for teammate shooting skill
 
 The model had an RMSE of .209 compared to .227 for the naive prediction (mean *xG* in next 10 seconds for all passes). The most important features were the location variables, specifically the previous and current location along the length of the ice. This is reasonable since passes closer to offensive zone and goal will likely lead to more shots.
 
