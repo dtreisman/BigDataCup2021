@@ -273,6 +273,8 @@ draw_nhl = function(){
 
 # load data
 nwhl <- read.csv("https://github.com/bigdatacup/Big-Data-Cup-2021/raw/main/hackathon_nwhl.csv")
+
+# position data from Dan Morse @ https://github.com/danmorse314/bdc21
 nwhl_positions <- read.csv("https://raw.githubusercontent.com/danmorse314/bdc21/main/nwhl%20stats.csv")[,c(1:4)]
 nwhl <- left_join(nwhl, nwhl_positions, by = c("Player" = "name"))
 
@@ -329,6 +331,7 @@ df_main <- nwhl %>%
          prev_event = as.factor(prev_event),
          prev_event2 = as.factor(prev_event2),
          is_goal = as.factor(is_goal)) %>%
+  # fixes some missing position info
   mutate(position = case_when(
     Player %in% c("Samantha Davis",
                   "Mary Parker",
@@ -372,10 +375,6 @@ df_shotsMod <- df_shots %>%
                    Home.Team.Goals, Away.Team.Goals, Away.Team.Skaters, Team, Player,
                    Player.2, Event, gameId, X.Coordinate.2, Y.Coordinate.2, is_shot,
                    Detail.2, number, team_city, position, Detail.1, Detail.3))
-# %>%
-  # mutate(Detail.1 = as.factor(as.character(Detail.1)),
-  #        Detail.3 = as.factor(as.character(Detail.3)),
-  #        Detail.4 = as.factor(as.character(Detail.4)))
 
 # store event IDs
 df_shots_id <- df_shotsMod$event_id
@@ -961,8 +960,5 @@ Autumn_MacDougall %>%
 
 
 gtsave(am_teammates, "am_teammates.png")
-
-View(shooter_effects %>%
-       filter(position == "F"))
 
 
