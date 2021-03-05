@@ -573,7 +573,7 @@ bottom30_players <- shooter_effects %>%
 top_bot_ranefs <- top30_players / bottom30_players
 
 # save
-ggsave("top_bot_ranefs.png", top_bot_ranefs, width = 8, height = 3.5)
+ggsave("shooters.png", top_bot_ranefs, width = 8, height = 3.9)
 
 
 # tables for write-up
@@ -866,7 +866,7 @@ bottom10_passers <- passer_effects %>%
 
 top_bot_passers <- top10_passers / bottom10_passers
 
-ggsave("top_bot_passers.png", top_bot_passers, width = 8, height = 3.5)
+ggsave("passers.png", top_bot_passers, width = 8, height = 3.9)
 
 
 
