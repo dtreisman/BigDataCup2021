@@ -400,7 +400,7 @@ saveRDS(rf, "rf_fit.rds")
 #confusion matrix
 rf$confusion
 
-#model accuracy
+# model test accuracy
 pred <- predict(rf, test)
 pred_comb <- as.data.frame(cbind(pred, test_y)) %>%
   mutate(acc = if_else(pred == test_y$is_goal, 1, 0)) %>%
