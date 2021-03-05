@@ -371,10 +371,11 @@ df_shotsMod <- df_shots %>%
   dplyr::select(-c(game_date, Minutes, Seconds, Home.Team, Away.Team, Home.Team.Skaters,
                    Home.Team.Goals, Away.Team.Goals, Away.Team.Skaters, Team, Player,
                    Player.2, Event, gameId, X.Coordinate.2, Y.Coordinate.2, is_shot,
-                   Detail.2, number, team_city, position)) %>%
-  mutate(Detail.1 = as.factor(as.character(Detail.1)),
-         Detail.3 = as.factor(as.character(Detail.3)),
-         Detail.4 = as.factor(as.character(Detail.4)))
+                   Detail.2, number, team_city, position, Detail.1, Detail.3))
+# %>%
+  # mutate(Detail.1 = as.factor(as.character(Detail.1)),
+  #        Detail.3 = as.factor(as.character(Detail.3)),
+  #        Detail.4 = as.factor(as.character(Detail.4)))
 
 # store event IDs
 df_shots_id <- df_shotsMod$event_id
@@ -385,14 +386,14 @@ df_shotsMod <- df_shotsMod %>%
 
 train_ <- sample(1:nrow(df_shotsMod), .7*nrow(df_shotsMod))
 train <- df_shotsMod[train_,]
-test <- df_shotsMod[-train_, -23]
-test_y <- df_shotsMod[-train_, 23]
+test <- df_shotsMod[-train_, -21]
+test_y <- df_shotsMod[-train_, 21]
 
 table(train$is_goal)
 table(test_y)
 
-rf <- randomForest(x = train[, -23], y = train$is_goal, ntree = 1000, do.trace = T, importance = T,
-                   sampsize = c(50, 50), strata = train$is_goal, cutoff = c(.65, .35))
+rf <- randomForest(x = train[, -21], y = train$is_goal, ntree = 1000, do.trace = T, importance = T,
+                   sampsize = c(50, 50), cutoff = c(.65, .35))
 
 saveRDS(rf, "rf_fit.rds")
 
@@ -440,9 +441,9 @@ LogLoss(pred_prob, as.numeric(as.character(test_y$is_goal)))
 # predict on full data
 pred_rf_full <- as.data.frame(predict(rf, df_shotsMod, type = "prob")[,2]) %>%
   cbind(df_shotsMod) %>%
-  cbind(df_id) %>%
+  cbind(df_shots_id) %>%
   rename(xG = `predict(rf, df_shotsMod, type = "prob")[, 2]`,
-         event_id = df_id) %>%
+         event_id = df_shots_id) %>%
   dplyr::select(event_id, xG) %>%
   left_join(df_shots, by = "event_id") 
 
@@ -460,7 +461,7 @@ df_passers <- df_main %>%
 df_rand <- pred_rf_full %>%
   left_join(df_passers) %>%
   mutate(pass_shot = as.factor(pass_shot)) %>%
-  dplyr::select(event_id, Player, passer, pass_shot, xG, position) %>%
+  dplyr::select(event_id, Player, passer, pass_shot, xG, position, Detail.1, Detail.3) %>%
   mutate(position = as.factor(position)) %>%
   fill_by_value(passer, value = "NULL") %>%
   fill_by_value(pass_shot, value = 0) 
@@ -472,7 +473,7 @@ n_games <- df_rand %>%
   arrange(n)
 
 # GLMM
-rand_fit <- lmer(xG ~ (1 | Player) + (1 | passer) + pass_shot, data = df_rand)
+rand_fit <- lmer(xG ~ (1 | Player) + (1 | passer) + pass_shot + Detail.1 + Detail.3, data = df_rand)
 summary(rand_fit)
 
 # code from Michael Lopez https://github.com/statsbylopez/NFL_Fumbles to get random effects and confidence intervals
@@ -516,7 +517,7 @@ top30_players <- shooter_effects %>%
   head(10) %>%
   ggplot(., aes(reorder(lev.names, Intercepts), Intercepts)) + 
   geom_hline(yintercept=0, color = "lightgrey") +
-  geom_hline(yintercept=f_mean) +
+  geom_hline(yintercept=f_mean, color = "red") +
   geom_errorbar(aes(ymin = min, ymax = max), 
                 width = 0, color = "black", alpha = .5) +
   geom_point(pch = 16) + 
@@ -536,12 +537,12 @@ bottom30_players <- shooter_effects %>%
   tail(10) %>%
   ggplot(., aes(reorder(lev.names, Intercepts), Intercepts)) + 
   geom_hline(yintercept=0, color = "lightgrey") +
-  geom_hline(yintercept=f_mean) +
+  geom_hline(yintercept=f_mean, color = "red") +
   geom_errorbar(aes(ymin = min, ymax = max), 
                 width = 0, color = "black", alpha = .5) +
   geom_point(pch = 16) + 
   labs(subtitle = "Bottom 10 Forwards",
-       caption = paste0("Forwards with 5 or more shots\nBlack line represents mean effect among forwards (", round(f_mean,3), ")")) +
+       caption = paste0("Forwards with 5 or more shots\nRed line represents mean effect among forwards (", round(f_mean,3), ")")) +
   guides(size = FALSE, shape = FALSE) +
   theme_bw() +
   ylim(-.2, .3) +
@@ -665,13 +666,14 @@ t <- df_passes %>%
   dplyr::select(Intercepts, xG) %>%
   na.omit()
 
-# t <- df_passes %>%
-#   mutate(xG_adj = xG - Intercepts) %>%
-#   dplyr::select(Intercepts, xG_adj) %>%
-#   na.omit()
+t <- df_passes %>%
+  mutate(xG_adj = xG - Intercepts) %>%
+  dplyr::select(Intercepts, xG_adj) %>%
+  na.omit()
 
 # R-squared
 cor(t$Intercepts, t$xG)**2
+cor(t$Intercepts, t$xG_adj)**2
 
 # pad data with extra rows for missing game seconds
 
@@ -960,5 +962,7 @@ Autumn_MacDougall %>%
 
 gtsave(am_teammates, "am_teammates.png")
 
+View(shooter_effects %>%
+       filter(position == "F"))
 
 
