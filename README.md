@@ -123,7 +123,7 @@ Another aspect that could be improved is the model for future *xG* used in deter
 
 Quantifying player skill is difficult in any sport. What makes hockey a particular challenge is the continuous nature of game-play and the reliance each player has on teammates to set them up for quality scoring chances. With this research, I have created a framework for separating individual player effects from other factors that influence *xG*. With these player effects, we can evaluate line groupings and be more strategic about putting players in positions to succeed.
 
-Thanks to all those at Stathletes for putting together this competition, and specifically Meghan Chayka, for her hard work in making the competition a success. Also, thanks to Domenic Galamini and Josh Pohlkamp-Hartt for their time spent guiding me through this project.
+Thanks to all those at Stathletes for putting together this competition, and specifically Meghan Chayka, for her hard work in making the competition a success. Also, thanks to Domenic Galamini and Josh Pohlkamp-Hartt for their time spent guiding me through this project, and to Ella Summer whose [Big Data Bowl winning submission](https://www.kaggle.com/es4vr17/random-player-effects-defensive-backs/) served as the inspiration for this framework.
 
 The code is available on GitHub: <https://github.com/dtreisman/BigDataCup2021>
 
